@@ -1,0 +1,10 @@
+(tests
+ (names test)
+ (libraries note_trainer_lib
+            alcotest
+            alcotest-lwt
+            qcheck)
+ ; (flags (:standard -open Tezos_stdlib
+ ;                   -open Tezos_crypto
+ ;                   -open Data_encoding))
+)

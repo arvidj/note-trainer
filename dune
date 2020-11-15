@@ -1,0 +1,11 @@
+(executable
+ (name note_trainer)
+ (modules note_trainer)
+ (libraries note_trainer_lib tezos-clic lwt.unix))
+
+(library
+ (name note_trainer_lib)
+ (modules note_trainer_lib)
+ (libraries tezos-clic lwt.unix)
+ (inline_tests)
+ (preprocess (pps ppx_inline_test)))
