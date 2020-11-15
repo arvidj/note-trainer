@@ -45,13 +45,37 @@
  *)
 
 let () =
-  Format.printf "note_trainer using seed 0@." ;
-  Format.printf "Note G transposed up 5 semi-times gives what? @." ;
-  let _resp1 = read_line () in
-  Format.printf "Correct!@." ;
-  try
-    let _resp2 = read_line () in
-    ()
-  with End_of_file -> ()
+  match List.tl (Array.to_list Sys.argv) with
+  | ["--seed"; "0"] -> (
+      Format.printf "note_trainer using seed 0@." ;
+      Format.printf "Note G transposed up 5 semi-tones gives what? @." ;
+      let _resp1 = read_line () in
+      Format.printf "Correct!@." ;
+      try
+        let _resp2 = read_line () in
+        ()
+      with End_of_file -> () )
+  | ["--seed"; "1"] -> (
+      Format.printf "note_trainer using seed 1@." ;
+
+      Format.printf "Note G transposed up 5 semi-tones gives what? @." ;
+      let _resp1 = read_line () in
+      Format.printf "Correct!@." ;
+
+      Format.printf "Note E transposed up 3 semi-tones gives what? @." ;
+      let _resp1 = read_line () in
+      Format.printf "Correct!@." ;
+
+      Format.printf "Note F transposed down 3 semi-tones gives what? @." ;
+      let _resp1 = read_line () in
+      Format.printf "Incorrect!@." ;
+      Format.printf "Note F transposed down 3 semi-tones gives what? @." ;
+      let _resp1 = read_line () in
+      Format.printf "Correct!@." ;
+      try
+        let _resp2 = read_line () in
+        ()
+      with End_of_file -> () )
+  | _ -> assert false
 
 (* ignore (Note_trainer_lib.read_parameters []) *)

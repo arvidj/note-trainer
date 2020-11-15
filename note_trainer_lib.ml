@@ -60,7 +60,7 @@ open Error_monad
 
      To generate a (question, answer), we :
         generate a random note by calling Note.arbitrary
-        generate a random interval by calling Random.State.int
+        generate a random interval by calling Random.State.int and applying modulo 12
         then the question is "Note [note] transposed up [interval] semi-times gives what? "
         and the answer is [Note.transpose note interval]
 

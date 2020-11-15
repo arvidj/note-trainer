@@ -1,9 +1,9 @@
 spawn dune exec ./note_trainer.exe -- --seed 0
 
 expect "note_trainer using seed 0"
-expect "Note G transposed up 5 semi-times gives what? "
+expect "Note G transposed up 5 semi-tones gives what? "
 send "C\r"
 expect "Correct!\r"
-close
+send "\004"
 
 interact

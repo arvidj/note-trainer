@@ -4,9 +4,11 @@ note_trainer:
 all:
 	dune build
 
+.PHONY: test-expect
 test-expect:
 	expect test/expect/test1.exp
+	expect test/expect/test2.exp
 
 
-test: note_trainer
-	poetry run cram test/cram/test1.t
+.PHONY: test
+test: test-expect
