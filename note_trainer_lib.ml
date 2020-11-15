@@ -79,9 +79,7 @@ type config = { seed : int }
 (* [default_config ()] returns the default configuration.
    It sets the seed to the current pid.
 *)
-let default_config : unit -> config =
-  assert false
-
+let default_config : unit -> config = assert false
 
 (*
    A module Interaction:
@@ -108,7 +106,7 @@ let default_config : unit -> config =
 
    Any other trailing strings results in an error.  *)
 
-let read_parameters : ~default:config -> string list -> config tzresult Lwt.t =
+let read_parameters : config -> string list -> config tzresult Lwt.t =
  (* Clic.parse_global_options *)
  fun _ _ -> fail Test_error
 

@@ -1,6 +1,6 @@
 (* Description:
 
-   v0.1:
+   v0.1.0:
 
    while true:
      ask "what is [note] transed up / down X semi-tones?"
@@ -14,7 +14,7 @@
       - use crowbar
       - use cram
 
-   v0.2:
+   v0.2.0:
 
 
    backlog:
@@ -44,4 +44,14 @@
 
  *)
 
-let () = ignore (Note_trainer_lib.read_parameters [])
+let () =
+  Format.printf "note_trainer using seed 0@." ;
+  Format.printf "Note G transposed up 5 semi-times gives what? @." ;
+  let _resp1 = read_line () in
+  Format.printf "Correct!@." ;
+  try
+    let _resp2 = read_line () in
+    ()
+  with End_of_file -> ()
+
+(* ignore (Note_trainer_lib.read_parameters []) *)
