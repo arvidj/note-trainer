@@ -63,6 +63,8 @@ module Theory = struct
         if r < 0 then j + r else r
       in
       notes.(nmod i (Array.length notes))
+
+    let pp fmt n = Format.pp_print_string fmt (to_string n)
   end
 end
 
