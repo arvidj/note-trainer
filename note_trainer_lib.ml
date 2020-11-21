@@ -49,22 +49,33 @@ module Theory = struct
     let notes =
       [| "C"; "C#"; "D"; "D#"; "E"; "F"; "F#"; "G"; "G#"; "A"; "A#"; "B" |]
 
-    let of_string : string -> t option =
+    let base = 12
+
+    let () = assert (12 = Array.length notes)
+
+    let of_string_opt : string -> t option =
      fun s ->
       let found = ref None in
       Array.iteri (fun i n -> if n = s then found := Some i else ()) notes ;
       !found
 
+    let nmod i j =
+      let r = i mod j in
+      if r < 0 then j + r else r
+
     let to_string : t -> string =
      (* -1 % 12 = 11 *)
-     fun i ->
-      let nmod i j =
-        let r = i mod j in
-        if r < 0 then j + r else r
-      in
-      notes.(nmod i (Array.length notes))
+     fun i -> notes.(nmod i base)
+
+    let of_int : int -> t = fun i -> nmod i base
+
+    let to_int : t -> int = fun i -> i
 
     let pp fmt n = Format.pp_print_string fmt (to_string n)
+
+    let transpose n i = nmod (n + i) base
+
+    let eq = ( = )
   end
 end
 

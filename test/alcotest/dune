@@ -1,9 +1,9 @@
 (tests
- (names test)
+ (names test test_async)
  (libraries note_trainer_lib
             alcotest
             alcotest-lwt
-            qcheck)
+            qcheck qcheck-alcotest)
  ; (flags (:standard -open Tezos_stdlib
  ;                   -open Tezos_crypto
  ;                   -open Data_encoding))
