@@ -80,7 +80,7 @@ type config = { seed : int }
 (* [default_config ()] returns the default configuration.
    It sets the seed to the current pid.
 *)
-let default_config : unit -> config = fun _ -> assert false
+let default_config : unit -> config = fun _ -> { seed = Unix.getpid () }
 
 (*
    A module Interaction:
