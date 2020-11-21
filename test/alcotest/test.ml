@@ -9,6 +9,21 @@ let ( >>=?? ) m f =
       Format.print_flush () ;
       Lwt.return_unit
 
+(** { [Theory.note] tests } *)
+
+let test_of_string _ =
+  let open Note_trainer_lib.Theory.Note in
+  let notes =
+    [| "C"; "C#"; "D"; "D#"; "E"; "F"; "F#"; "G"; "G#"; "A"; "A#"; "B" |]
+  in
+  Array.iter
+    (fun nstr ->
+      match of_string nstr with
+      | Some n -> Alcotest.check Alcotest.string "round-trip" nstr (to_string n)
+      | None -> Alcotest.fail "could not transform from string")
+    notes ;
+  Lwt.return_unit
+
 (** { [default_parameters] tests } *)
 let test_default_config _ =
   let open Note_trainer_lib in
@@ -46,7 +61,8 @@ let test_read_parameters_trailing _ =
         \                             trailing parameters"
 
 let tests =
-  [ ("default_config", `Quick, test_default_config);
+  [ ("test_of_string", `Quick, test_of_string);
+    ("default_config", `Quick, test_default_config);
     ("read_parameters_ok", `Quick, test_read_parameters_ok);
     ("read_parameters_ok1", `Quick, test_read_parameters_ok1);
     ("read_parameters_default", `Quick, test_read_parameters_default);

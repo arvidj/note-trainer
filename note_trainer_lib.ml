@@ -5,6 +5,8 @@ open Tezos_clic
 
 (* A module theory
      A module Note
+       type t : a representation of the note
+
        of_string : string -> t option
 
        From a string representation of a note to a note.
@@ -32,12 +34,39 @@ open Tezos_clic
 
        [of_int x] gives the xth note on the note circle,
        where 0 corresponds to C, 1 to C#, etc.
+       where 12 corresponds to C again
+       where -1 correspond to B, -2 to A#, etc.
 
        arbitrary : Random.state -> (t * Random.state)
 
        [arbitrary s] returns a random note using the state of the
        PRNG in [s]. It also returns the new state of the PRNG.
+ *)
+module Theory = struct
+  module Note = struct
+    type t = int
 
+    let notes =
+      [| "C"; "C#"; "D"; "D#"; "E"; "F"; "F#"; "G"; "G#"; "A"; "A#"; "B" |]
+
+    let of_string : string -> t option =
+     fun s ->
+      let found = ref None in
+      Array.iteri (fun i n -> if n = s then found := Some i else ()) notes ;
+      !found
+
+    let to_string : t -> string =
+     (* -1 % 12 = 11 *)
+     fun i ->
+      let nmod i j =
+        let r = i mod j in
+        if r < 0 then j + r else r
+      in
+      notes.(nmod i (Array.length notes))
+  end
+end
+
+(*
    A module Questions
      type t
 
@@ -67,7 +96,7 @@ open Tezos_clic
 
 *)
 
-type error += Test_error
+(* type error += Test_error *)
 
 (*
    type config :
