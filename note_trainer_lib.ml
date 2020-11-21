@@ -40,7 +40,7 @@ open Tezos_clic
        arbitrary : Random.state -> (t * Random.state)
 
        [arbitrary s] returns a random note using the state of the
-       PRNG in [s]. It also returns the new state of the PRNG.
+       PRNG in [s]. 
  *)
 module Theory = struct
   module Note = struct
@@ -69,11 +69,13 @@ module Theory = struct
 
     let of_int : int -> t = fun i -> nmod i base
 
-    let to_int : t -> int = fun i -> i
-
     let pp fmt n = Format.pp_print_string fmt (to_string n)
 
     let transpose n i = nmod (n + i) base
+
+    let arbitrary s = of_int (Random.State.int s base)
+
+    let to_int : t -> int = fun i -> i
 
     let eq = ( = )
   end
@@ -108,6 +110,12 @@ end
         and the answer is [Note.transpose note interval]
 
 *)
+
+module Questions = struct
+  type t = Random.State.t
+
+  let init ~seed = Random.State.make [| seed |]
+end
 
 (* type error += Test_error *)
 

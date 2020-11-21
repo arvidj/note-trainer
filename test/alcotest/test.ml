@@ -52,6 +52,22 @@ let test_transpose_wraps =
     (QCheck.pair note_arbitrary QCheck.small_int)
     (fun (n, i) -> eq n (transpose n (i * 12)))
 
+(** { Questions tests } *)
+
+let test_questions_init _ = ignore (Questions.init ~seed:0)
+
+let test_arbitrary_deterministic =
+  QCheck.Test.make
+    ~name:"Note.Theory.arbitrary is deterministic"
+    ~count:1000
+    QCheck.(array int)
+    (fun sds ->
+      let t = Random.State.make sds in
+      let t' = Random.State.copy t in
+      let ls = List.init 10 (fun _ -> arbitrary t) in
+      let ls' = List.init 10 (fun _ -> arbitrary t') in
+      ls = ls')
+
 (** { [default_parameters] tests } *)
 let test_default_config () =
   let pid = Unix.getpid () in
@@ -61,12 +77,13 @@ let test_default_config () =
 let prop_tests =
   List.map
     QCheck_alcotest.to_alcotest
-    [test_transpose_wraps; test_transpose_order]
+    [test_transpose_wraps; test_transpose_order; test_arbitrary_deterministic]
 
 let unit_tests =
   [ ("test_of_string_opt", `Quick, test_of_string_opt);
     ("test_pp", `Quick, test_pp);
     ("test_of_int", `Quick, test_of_int);
+    ("test_questions_init", `Quick, test_questions_init);
     ("test_default_config", `Quick, test_default_config) ]
 
 let () =
