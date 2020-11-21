@@ -97,7 +97,7 @@ end
    the function init initalize the internal state of the Questions module.
    It is composed of a PRNG state. It is initalized by the seed parameter.
 
-   The function [next_answer t] generates a random question, and returns the
+   The function [next_question t] generates a random question, and returns the
    question and the expected answer as a string.
 
    Possible questions are:
@@ -115,6 +115,19 @@ module Questions = struct
   type t = Random.State.t
 
   let init ~seed = Random.State.make [| seed |]
+
+  let next_question st =
+    let n = Theory.Note.arbitrary st in
+    let i = Random.State.int st Theory.Note.base in
+    let question =
+      Format.asprintf
+        "Note %a transposed up %d semi-times gives what?"
+        Theory.Note.pp
+        n
+        i
+    in
+    let answer = Theory.Note.(to_string (transpose n i)) in
+    (question, answer)
 end
 
 (* type error += Test_error *)

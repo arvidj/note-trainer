@@ -52,10 +52,6 @@ let test_transpose_wraps =
     (QCheck.pair note_arbitrary QCheck.small_int)
     (fun (n, i) -> eq n (transpose n (i * 12)))
 
-(** { Questions tests } *)
-
-let test_questions_init _ = ignore (Questions.init ~seed:0)
-
 let test_arbitrary_deterministic =
   QCheck.Test.make
     ~name:"Note.Theory.arbitrary is deterministic"
@@ -67,6 +63,27 @@ let test_arbitrary_deterministic =
       let ls = List.init 10 (fun _ -> arbitrary t) in
       let ls' = List.init 10 (fun _ -> arbitrary t') in
       ls = ls')
+
+(** { [Questions] tests } *)
+
+let test_questions_init _ = ignore (Questions.init ~seed:0)
+
+let test_questions_next_question _ =
+  let qas =
+    [ ("Note F transposed up 6 semi-times gives what?", "B");
+      ("Note A transposed up 3 semi-times gives what?", "C");
+      ("Note F transposed up 10 semi-times gives what?", "D#");
+      ("Note A# transposed up 11 semi-times gives what?", "A") ]
+  in
+  let st = Questions.init ~seed:123 in
+  List.iter
+    (fun qa ->
+      Alcotest.check
+        Alcotest.(pair string string)
+        "deterministic and reasonable q/a suite"
+        qa
+        (Questions.next_question st))
+    qas
 
 (** { [default_parameters] tests } *)
 let test_default_config () =
@@ -84,6 +101,7 @@ let unit_tests =
     ("test_pp", `Quick, test_pp);
     ("test_of_int", `Quick, test_of_int);
     ("test_questions_init", `Quick, test_questions_init);
+    ("test_questions_next_question", `Quick, test_questions_next_question);
     ("test_default_config", `Quick, test_default_config) ]
 
 let () =
