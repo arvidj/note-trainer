@@ -1,6 +1,7 @@
 (* open Tezos_clic *)
 open Tezos_error_monad
 open Error_monad
+open Tezos_clic
 
 (* A module theory
      A module Note
@@ -79,7 +80,7 @@ type config = { seed : int }
 (* [default_config ()] returns the default configuration.
    It sets the seed to the current pid.
 *)
-let default_config : unit -> config = assert false
+let default_config : unit -> config = fun _ -> assert false
 
 (*
    A module Interaction:
@@ -104,10 +105,30 @@ let default_config : unit -> config = assert false
 
    If "--seed" is missing, then the value from ~default is used instead.
 
-   Any other trailing strings results in an error.  *)
+   If "--seed" is present, but not an integer, then the error Invalid_parameter
+   is returned.
 
-let read_parameters : config -> string list -> config tzresult Lwt.t =
+   Any other trailing strings results in an Invalid_parameter.  *)
+
+type error += Invalid_parameter
+
+let read_parameters : default:config -> string list -> config tzresult Lwt.t =
  (* Clic.parse_global_options *)
- fun _ _ -> fail Test_error
+ fun ~default args ->
+  let param =
+    Clic.parameter (fun _ s ->
+        match Stdlib.int_of_string_opt s with
+        | Some i -> return i
+        | None -> fail Invalid_parameter)
+  in
+  let options =
+    Clic.args1 @@ Clic.arg ~doc:"Seed" ~long:"seed" ~placeholder:"N" param
+  in
+  Clic.parse_global_options options () args >>=? fun res ->
+  match res with
+  | (seed, []) ->
+      let seed = Option.value seed ~default:default.seed in
+      return { seed }
+  | _ -> fail Invalid_parameter
 
 let () = ()

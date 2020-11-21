@@ -6,6 +6,4 @@
 (library
  (name note_trainer_lib)
  (modules note_trainer_lib)
- (libraries tezos-clic lwt.unix)
- (inline_tests)
- (preprocess (pps ppx_inline_test)))
+ (libraries tezos-clic lwt.unix))
